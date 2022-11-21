@@ -48,9 +48,12 @@ int main(int argc, char** argv) {
   ros::NodeHandle nodeHandle;
   // Get node parameters
   std::string taskFile, urdfFile, referenceFile;
-  nodeHandle.getParam("/taskFile", taskFile);
-  nodeHandle.getParam("/referenceFile", referenceFile);
-  nodeHandle.getParam("/urdfFile", urdfFile);
+  taskFile = "/home/zhang/Documents/build_ocs2/src/ocs2/ocs2_robotic_examples/ocs2_legged_urdf/config/mpc/task.info";
+  urdfFile = "/home/zhang/Documents/build_ocs2/src/ocs2_robotic_assets/resources/legged_urdf/urdf/legged_urdf.urdf";
+  referenceFile = "/home/zhang/Documents/build_ocs2/src/ocs2/ocs2_robotic_examples/ocs2_legged_urdf/config/command/reference.info";
+  //nodeHandle.getParam("/taskFile", taskFile);
+  //nodeHandle.getParam("/referenceFile", referenceFile);
+  //nodeHandle.getParam("/urdfFile", urdfFile);
 
   // Robot interface
   LeggedRobotInterface interface(taskFile, urdfFile, referenceFile);
@@ -62,7 +65,6 @@ int main(int argc, char** argv) {
   // ROS ReferenceManager
   auto rosReferenceManagerPtr = std::make_shared<RosReferenceManager>(robotName, interface.getReferenceManagerPtr());
   rosReferenceManagerPtr->subscribe(nodeHandle);
-
 
   // MPC
   GaussNewtonDDP_MPC mpc(interface.mpcSettings(), interface.ddpSettings(), interface.getRollout(), interface.getOptimalControlProblem(),

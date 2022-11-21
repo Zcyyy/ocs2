@@ -245,6 +245,7 @@ void MPC_ROS_Interface::mpcObservationCallback(const ocs2_msgs::mpc_observation:
 
   std::cout << "mpcObservation Callback" << std::endl;
   // current time, state, input, and subsystem
+  std::cout << "observation msg" << *msg << std::endl;
   const auto currentObservation = ros_msg_conversions::readObservationMsg(*msg);
 
   // measure the delay in running MPC
@@ -253,6 +254,8 @@ void MPC_ROS_Interface::mpcObservationCallback(const ocs2_msgs::mpc_observation:
   std::cout << "mpcObservation Callback" << std::endl;
   // run MPC
   bool controllerIsUpdated = mpc_.run(currentObservation.time, currentObservation.state);
+
+  std::cout << "mpcObservation Callback" << std::endl;
   if (!controllerIsUpdated) {
     return;
   }
@@ -339,7 +342,6 @@ void MPC_ROS_Interface::launchNodes(ros::NodeHandle& nodeHandle) {
   // Observation subscriber
   mpcObservationSubscriber_ = nodeHandle.subscribe(topicPrefix_ + "_mpc_observation", 1, &MPC_ROS_Interface::mpcObservationCallback, this,
                                                    ::ros::TransportHints().tcpNoDelay());
-
   // MPC publisher
   mpcPolicyPublisher_ = nodeHandle.advertise<ocs2_msgs::mpc_flattened_controller>(topicPrefix_ + "_mpc_policy", 1, true);
 

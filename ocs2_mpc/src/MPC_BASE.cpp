@@ -50,6 +50,7 @@ void MPC_BASE::reset() {
 /******************************************************************************************************/
 /******************************************************************************************************/
 /******************************************************************************************************/
+//TODO:2022.11.21 18:25
 bool MPC_BASE::run(scalar_t currentTime, const vector_t& currentState) {
   // check if the current time exceeds the solver final limit
   if (!initRun_ && currentTime >= getSolverPtr()->getFinalTime()) {

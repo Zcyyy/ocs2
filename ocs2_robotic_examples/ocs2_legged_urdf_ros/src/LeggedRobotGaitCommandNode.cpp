@@ -42,8 +42,8 @@ int main(int argc, char* argv[]) {
   ros::init(argc, argv, robotName + "_mpc_mode_schedule");
   ros::NodeHandle nodeHandle;
   // Get node parameters
-  std::string gaitCommandFile;
-  nodeHandle.getParam("/gaitCommandFile", gaitCommandFile);
+  std::string gaitCommandFile = "/home/zhang/Documents/build_ocs2/src/ocs2/ocs2_robotic_examples/ocs2_legged_urdf/config/command/gait.info";
+  //nodeHandle.getParam("/gaitCommandFile", gaitCommandFile);
   std::cerr << "Loading gait file: " << gaitCommandFile << std::endl;
 
   GaitKeyboardPublisher gaitCommand(nodeHandle, gaitCommandFile, robotName, true);

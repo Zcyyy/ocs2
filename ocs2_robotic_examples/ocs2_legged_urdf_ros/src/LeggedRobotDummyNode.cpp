@@ -49,9 +49,12 @@ int main(int argc, char** argv) {
   ros::NodeHandle nodeHandle;
   // Get node parameters
   std::string taskFile, urdfFile, referenceFile;
-  nodeHandle.getParam("/taskFile", taskFile);
-  nodeHandle.getParam("/urdfFile", urdfFile);
-  nodeHandle.getParam("/referenceFile", referenceFile);
+  taskFile = "/home/zhang/Documents/build_ocs2/src/ocs2/ocs2_robotic_examples/ocs2_legged_urdf/config/mpc/task.info";
+  urdfFile = "/home/zhang/Documents/build_ocs2/src/ocs2_robotic_assets/resources/legged_urdf/urdf/legged_urdf.urdf";
+  referenceFile = "/home/zhang/Documents/build_ocs2/src/ocs2/ocs2_robotic_examples/ocs2_legged_urdf/config/command/reference.info";
+  //nodeHandle.getParam("/taskFile", taskFile);
+  //nodeHandle.getParam("/urdfFile", urdfFile);
+  //nodeHandle.getParam("/referenceFile", referenceFile);
 
   // Robot interface
   LeggedRobotInterface interface(taskFile, urdfFile, referenceFile);

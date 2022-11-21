@@ -47,6 +47,9 @@ SolverBase::SolverBase() : referenceManagerPtr_(new ReferenceManager) {}
 /******************************************************************************************************/
 /******************************************************************************************************/
 void SolverBase::run(scalar_t initTime, const vector_t& initState, scalar_t finalTime) {
+  std::cout << "init Time: " << initTime << std::endl;
+  std::cout << "init State: " << initState << std::endl;
+  std::cout << "final Time: " << finalTime << std::endl;
   preRun(initTime, initState, finalTime);
   runImpl(initTime, initState, finalTime);
   postRun();
