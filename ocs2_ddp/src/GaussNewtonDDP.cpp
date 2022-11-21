@@ -197,6 +197,7 @@ void GaussNewtonDDP::reset() {
   computeControllerTimer_.reset();
   searchStrategyTimer_.reset();
   totalDualSolutionTimer_.reset();
+  std::cout << "why not there????" << std::endl;
 }
 
 /******************************************************************************************************/

@@ -36,7 +36,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <pinocchio/algorithm/jacobian.hpp>
 #include <pinocchio/algorithm/kinematics.hpp>
 
-#include "ocs2_legged_robot/LeggedRobotInterface.h"
+#include "ocs2_legged_urdf/LeggedRobotInterface.h"
 
 #include <ocs2_centroidal_model/AccessHelperFunctions.h>
 #include <ocs2_centroidal_model/CentroidalModelPinocchioMapping.h>
@@ -46,13 +46,13 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <ocs2_oc/synchronized_module/SolverSynchronizedModule.h>
 #include <ocs2_pinocchio_interface/PinocchioEndEffectorKinematicsCppAd.h>
 
-#include "ocs2_legged_robot/LeggedRobotPreComputation.h"
-#include "ocs2_legged_robot/constraint/FrictionConeConstraint.h"
-#include "ocs2_legged_robot/constraint/NormalVelocityConstraintCppAd.h"
-#include "ocs2_legged_robot/constraint/ZeroForceConstraint.h"
-#include "ocs2_legged_robot/constraint/ZeroVelocityConstraintCppAd.h"
-#include "ocs2_legged_robot/cost/LeggedRobotQuadraticTrackingCost.h"
-#include "ocs2_legged_robot/dynamics/LeggedRobotDynamicsAD.h"
+#include "ocs2_legged_urdf/LeggedRobotPreComputation.h"
+#include "ocs2_legged_urdf/constraint/FrictionConeConstraint.h"
+#include "ocs2_legged_urdf/constraint/NormalVelocityConstraintCppAd.h"
+#include "ocs2_legged_urdf/constraint/ZeroForceConstraint.h"
+#include "ocs2_legged_urdf/constraint/ZeroVelocityConstraintCppAd.h"
+#include "ocs2_legged_urdf/cost/LeggedRobotQuadraticTrackingCost.h"
+#include "ocs2_legged_urdf/dynamics/LeggedRobotDynamicsAD.h"
 
 // Boost
 #include <boost/filesystem/operations.hpp>
@@ -97,7 +97,7 @@ LeggedRobotInterface::LeggedRobotInterface(const std::string& taskFile, const st
   rolloutSettings_ = rollout::loadSettings(taskFile, "rollout", verbose);
   sqpSettings_ = multiple_shooting::loadSettings(taskFile, "multiple_shooting", verbose);
 
-  // OptimalConrolProblem
+  // OptimalControlProblem //TODO:
   setupOptimalConrolProblem(taskFile, urdfFile, referenceFile, verbose);
 
   // initial state
@@ -110,14 +110,11 @@ LeggedRobotInterface::LeggedRobotInterface(const std::string& taskFile, const st
 /******************************************************************************************************/
 void LeggedRobotInterface::setupOptimalConrolProblem(const std::string& taskFile, const std::string& urdfFile,
                                                      const std::string& referenceFile, bool verbose) {
-  std::cout << modelSettings_.jointNames.at(1) << std::endl;
   // PinocchioInterface
   pinocchioInterfacePtr_.reset(new PinocchioInterface(centroidal_model::createPinocchioInterface(urdfFile, modelSettings_.jointNames)));
 
-  std::cout << modelSettings_.contactNames3DoF.at(1) << std::endl;
-  std::cout << modelSettings_.contactNames6DoF.data() << std::endl;
-  std::cout << pinocchioInterfacePtr_->getModel().nq << std::endl;
   // CentroidalModelInfo
+  std::cout << "asdfasdfasdf" << pinocchioInterfacePtr_->getModel().nq << std::endl;
   centroidalModelInfo_ = centroidal_model::createCentroidalModelInfo(
       *pinocchioInterfacePtr_, centroidal_model::loadCentroidalType(taskFile),
       centroidal_model::loadDefaultJointState(pinocchioInterfacePtr_->getModel().nq - 6, referenceFile), modelSettings_.contactNames3DoF,

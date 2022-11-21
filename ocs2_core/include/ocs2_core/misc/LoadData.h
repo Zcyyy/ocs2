@@ -130,6 +130,9 @@ inline void loadCppDataType(const std::string& filename, const std::string& data
  */
 template <typename Derived>
 inline void loadEigenMatrix(const std::string& filename, const std::string& matrixName, Eigen::MatrixBase<Derived>& matrix) {
+  std::cout << filename << std::endl;
+  std::cout << matrixName << std::endl;
+  std::cout << matrix << std::endl;
   using scalar_t = typename Eigen::MatrixBase<Derived>::Scalar;
 
   size_t rows = matrix.rows();

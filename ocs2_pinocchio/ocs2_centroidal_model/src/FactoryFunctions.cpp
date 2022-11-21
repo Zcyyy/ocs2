@@ -102,6 +102,7 @@ CentroidalModelInfo createCentroidalModelInfo(const PinocchioInterface& interfac
   info.stateDim = info.generalizedCoordinatesNum + 6;
   info.inputDim = info.actuatedDofNum + 3 * info.numThreeDofContacts + 6 * info.numSixDofContacts;
   info.robotMass = pinocchio::computeTotalMass(model);
+  std::cout << "total Mass: " << info.robotMass << std::endl;
 
   for (const auto& name : threeDofContactNames) {
     info.endEffectorFrameIndices.push_back(model.getBodyId(name));
@@ -130,6 +131,7 @@ CentroidalModelInfo createCentroidalModelInfo(const PinocchioInterface& interfac
 /******************************************************************************************************/
 /******************************************************************************************************/
 CentroidalModelType loadCentroidalType(const std::string& configFilePath, const std::string& fieldName) {
+  std::cout << "\033[31m" << "FactoryFunctions" << "\033[32m" << "load centroidal type" << std::endl;
   boost::property_tree::ptree pt;
   boost::property_tree::read_info(configFilePath, pt);
   const size_t type = pt.template get<size_t>(fieldName);

@@ -74,9 +74,12 @@ class GaussNewtonDDP_MPC final : public MPC_BASE {
 
  private:
   void calculateController(scalar_t initTime, const vector_t& initState, scalar_t finalTime) override {
+    std::cout << "in real calculateController: " << std::endl;
     if (settings().coldStart_) {
+      std::cout << "in real calculateController: " << std::endl;
       ddpPtr_->reset();
     }
+    std::cout << "in real calculateController: " << std::endl;
     ddpPtr_->run(initTime, initState, finalTime);
   }
 
