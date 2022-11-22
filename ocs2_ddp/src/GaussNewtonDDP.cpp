@@ -197,7 +197,6 @@ void GaussNewtonDDP::reset() {
   computeControllerTimer_.reset();
   searchStrategyTimer_.reset();
   totalDualSolutionTimer_.reset();
-  std::cout << "why not there????" << std::endl;
 }
 
 /******************************************************************************************************/
@@ -1037,15 +1036,18 @@ void GaussNewtonDDP::runImpl(scalar_t initTime, const vector_t& initState, scala
 
     // nominal --> nominal: constructs the LQ problem around the nominal trajectories
     linearQuadraticApproximationTimer_.startTimer();
+    std::cout << "nominal: constructs the LQ problem around the nominal trajectories" << std::endl;
     approximateOptimalControlProblem();
     linearQuadraticApproximationTimer_.endTimer();
 
     // nominal --> nominal: solves the LQ problem
+    std::cout << "nominal: solves the LQ problem" << std::endl;
     backwardPassTimer_.startTimer();
     avgTimeStepBP_ = solveSequentialRiccatiEquations(nominalPrimalData_.modelDataFinalTime.cost);
     backwardPassTimer_.endTimer();
 
     // calculate controller and store the result in unoptimizedController_
+    std::cout << "calculate controller and store the result in unoptimizedController_" << std::endl;
     computeControllerTimer_.startTimer();
     calculateController();
     computeControllerTimer_.endTimer();

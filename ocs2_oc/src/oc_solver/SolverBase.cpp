@@ -51,7 +51,9 @@ void SolverBase::run(scalar_t initTime, const vector_t& initState, scalar_t fina
   std::cout << "init State: " << initState << std::endl;
   std::cout << "final Time: " << finalTime << std::endl;
   preRun(initTime, initState, finalTime);
+  std::cout << "after preRun!!!!!!!" << std::endl;
   runImpl(initTime, initState, finalTime);
+  std::cout << "after runImpl!!!!!!!" << std::endl;
   postRun();
 }
 
