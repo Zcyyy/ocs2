@@ -84,6 +84,7 @@ ad_vector_t PinocchioWholeBodyDynamicsAD::getValueCppAd(PinocchioInterfaceCppAd&
   ad_vector_t stateDerivative(info.stateDim);
 
   // compute center of mass acceleration and derivative of the normalized angular momentum
+  std::cout << "change here" << std::endl;
   wholebody_model::getNormalizedMomentum(stateDerivative, info) =
       getNormalizedWholeBodyMomentumRate(pinocchioInterfaceCppAd, info, input);
 

@@ -34,7 +34,7 @@ void updateWholeBodyDynamics(PinocchioInterfaceTpl<SCALAR_T>& interface, const W
   //std::cout << info.wholebodyModelType << std::endl;
   switch (info.wholebodyModelType) {
     case WholeBodyModelType::WholeBodyDynamics: {
-      std::cout << " dooooo something??????? " << std::endl;
+      //std::cout << " dooooo something??????? " << std::endl;
       pinocchio::computeCentroidalMap(model, data, q);
       pinocchio::updateFramePlacements(model, data);
 
