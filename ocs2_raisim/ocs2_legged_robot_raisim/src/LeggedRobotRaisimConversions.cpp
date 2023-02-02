@@ -40,7 +40,7 @@ namespace legged_robot {
 std::pair<Eigen::VectorXd, Eigen::VectorXd> LeggedRobotRaisimConversions::stateToRaisimGenCoordGenVel(const vector_t& state,
                                                                                                       const vector_t& input) {
   // get RBD state
-  const vector_t rbdState = centroidalModelRbdConversions_.computeRbdStateFromCentroidalModel(state, input);
+  const vector_t rbdState = WholeBodyModelRbdConversions_.computeRbdStateFromWholeBodyModel(state, input);
 
   // convert to generalized coordinate and generalized velocity
   return rbdStateToRaisimGenCoordGenVel(rbdState);
@@ -54,7 +54,7 @@ vector_t LeggedRobotRaisimConversions::raisimGenCoordGenVelToState(const Eigen::
   const vector_t rbdState = raisimGenCoordGenVelToRbdState(q, dq);
 
   // convert to state
-  return centroidalModelRbdConversions_.computeCentroidalStateFromRbdModel(rbdState);
+  return WholeBodyModelRbdConversions_.computeWholeBodyStateFromRbdModel(rbdState);
 }
 
 /******************************************************************************************************/
@@ -66,7 +66,7 @@ Eigen::VectorXd LeggedRobotRaisimConversions::inputToRaisimGeneralizedForce(doub
   const vector_t desiredJointAccelerations = vector_t::Zero(12);  // TODO(areske): retrieve this from controller?
   const vector_t measuredRbdState = raisimGenCoordGenVelToRbdState(q, dq);
   const vector_t rbdTorque =
-      centroidalModelRbdConversions_.computeRbdTorqueFromCentroidalModelPD(state, input, desiredJointAccelerations, measuredRbdState);
+      WholeBodyModelRbdConversions_.computeRbdTorqueFromWholeBodyModelPD(state, input, desiredJointAccelerations, measuredRbdState);
 
   // convert to generalized force
   return rbdTorqueToRaisimGeneralizedForce(rbdTorque);

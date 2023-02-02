@@ -45,7 +45,7 @@ class LeggedRobotMpcnetDefinition final : public ocs2::mpcnet::MpcnetDefinitionB
    * @param [in] leggedRobotInterface : Legged robot interface.
    */
   LeggedRobotMpcnetDefinition(const LeggedRobotInterface& leggedRobotInterface)
-      : defaultState_(leggedRobotInterface.getInitialState()), centroidalModelInfo_(leggedRobotInterface.getCentroidalModelInfo()) {}
+      : defaultState_(leggedRobotInterface.getInitialState()), WholeBodyModelInfo_(leggedRobotInterface.getWholeBodyModelInfo()) {}
 
   /**
    * Default destructor.
@@ -74,7 +74,7 @@ class LeggedRobotMpcnetDefinition final : public ocs2::mpcnet::MpcnetDefinitionB
   const scalar_t allowedPitchDeviation_ = 30.0 * M_PI / 180.0;
   const scalar_t allowedRollDeviation_ = 30.0 * M_PI / 180.0;
   const vector_t defaultState_;
-  const CentroidalModelInfo centroidalModelInfo_;
+  const WholeBodyModelInfo WholeBodyModelInfo_;
 };
 
 }  // namespace legged_robot

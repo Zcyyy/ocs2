@@ -37,10 +37,10 @@ namespace legged_robot {
 /******************************************************************************************************/
 /******************************************************************************************************/
 /******************************************************************************************************/
-LeggedRobotRaisimVisualizer::LeggedRobotRaisimVisualizer(PinocchioInterface pinocchioInterface, CentroidalModelInfo centroidalModelInfo,
+LeggedRobotRaisimVisualizer::LeggedRobotRaisimVisualizer(PinocchioInterface pinocchioInterface, WholeBodyModelInfo WholeBodyModelInfo,
                                                          const PinocchioEndEffectorKinematics& endEffectorKinematics,
                                                          ros::NodeHandle& nodeHandle, scalar_t maxUpdateFrequency)
-    : LeggedRobotVisualizer(pinocchioInterface, centroidalModelInfo, endEffectorKinematics, nodeHandle, maxUpdateFrequency) {}
+    : LeggedRobotVisualizer(pinocchioInterface, WholeBodyModelInfo, endEffectorKinematics, nodeHandle, maxUpdateFrequency) {}
 
 /******************************************************************************************************/
 /******************************************************************************************************/

@@ -65,6 +65,7 @@ PinocchioInterface createPinocchioInterface(const std::string& urdfFilePath, con
 
   // remove extraneous joints from urdf
   ::urdf::ModelInterfaceSharedPtr newModel = std::make_shared<::urdf::ModelInterface>(*urdfTree);
+
   for (joint_pair_t& jointPair : newModel->joints_) {
     if (std::find(jointNames.begin(), jointNames.end(), jointPair.first) == jointNames.end()) {
       jointPair.second->type = urdf::Joint::FIXED;
@@ -93,6 +94,17 @@ CentroidalModelInfo createCentroidalModelInfo(const PinocchioInterface& interfac
     throw std::runtime_error("[CentroidalModelInfo] nominalJointAngles.size() should be " + std::to_string(expaectedNumJoints));
   }
 
+  /*
+  int a = 0;
+  for(auto i : model.inertias)
+  {
+    std::cout << i.mass() << std::endl;
+    std::cout << "   " << std::endl;
+    std::cout << i.inertia().matrix() << std::endl;
+    std::cout << a << std::endl;
+    a++;
+  }
+  */
   CentroidalModelInfoTpl<scalar_t> info;
   info.centroidalModelType = type;
   info.numThreeDofContacts = threeDofContactNames.size();

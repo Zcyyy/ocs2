@@ -29,7 +29,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 
-#include <ocs2_centroidal_model/CentroidalModelInfo.h>
+#include <ocs2_whole_body_model/WholeBodyModelInfo.h>
 #include <ocs2_core/cost/QuadraticStateCost.h>
 #include <ocs2_core/cost/QuadraticStateInputCost.h>
 
@@ -44,7 +44,7 @@ namespace legged_robot {
  */
 class LeggedRobotStateInputQuadraticCost final : public QuadraticStateInputCost {
  public:
-  LeggedRobotStateInputQuadraticCost(matrix_t Q, matrix_t R, CentroidalModelInfo info,
+  LeggedRobotStateInputQuadraticCost(matrix_t Q, matrix_t R, WholeBodyModelInfo info,
                                      const SwitchedModelReferenceManager& referenceManager)
       : QuadraticStateInputCost(std::move(Q), std::move(R)), info_(std::move(info)), referenceManagerPtr_(&referenceManager) {}
 
@@ -62,7 +62,7 @@ class LeggedRobotStateInputQuadraticCost final : public QuadraticStateInputCost 
     return {state - xNominal, input - uNominal};
   }
 
-  const CentroidalModelInfo info_;
+  const WholeBodyModelInfo info_;
   const SwitchedModelReferenceManager* referenceManagerPtr_;
 };
 
@@ -71,7 +71,7 @@ class LeggedRobotStateInputQuadraticCost final : public QuadraticStateInputCost 
  */
 class LeggedRobotStateQuadraticCost final : public QuadraticStateCost {
  public:
-  LeggedRobotStateQuadraticCost(matrix_t Q, CentroidalModelInfo info, const SwitchedModelReferenceManager& referenceManager)
+  LeggedRobotStateQuadraticCost(matrix_t Q, WholeBodyModelInfo info, const SwitchedModelReferenceManager& referenceManager)
       : QuadraticStateCost(std::move(Q)), info_(std::move(info)), referenceManagerPtr_(&referenceManager) {}
 
   ~LeggedRobotStateQuadraticCost() override = default;
@@ -86,7 +86,7 @@ class LeggedRobotStateQuadraticCost final : public QuadraticStateCost {
     return state - xNominal;
   }
 
-  const CentroidalModelInfo info_;
+  const WholeBodyModelInfo info_;
   const SwitchedModelReferenceManager* referenceManagerPtr_;
 };
 

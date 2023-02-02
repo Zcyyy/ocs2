@@ -32,7 +32,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <Eigen/Core>
 #include <raisim/object/terrain/HeightMap.hpp>
 
-#include <ocs2_centroidal_model/CentroidalModelRbdConversions.h>
+#include <ocs2_whole_body_model/WholeBodyModelRbdConversions.h>
 
 namespace ocs2 {
 namespace legged_robot {
@@ -49,11 +49,11 @@ class LeggedRobotRaisimConversions final {
    * @param [in] initialState : The initial switched model state.
    * @param [in] check : Whether to check if the variables coming from or going to RaiSim respect the actuator limits (by default false).
    */
-  LeggedRobotRaisimConversions(PinocchioInterface pinocchioInterface, const CentroidalModelInfo& centroidalModelInfo,
+  LeggedRobotRaisimConversions(PinocchioInterface pinocchioInterface, const WholeBodyModelInfo& WholeBodyModelInfo,
                                const vector_t& initialState, bool check = false)
       : check_(check),
         continuousOrientation_(initialState.segment<3>(9)),
-        centroidalModelRbdConversions_(std::move(pinocchioInterface), centroidalModelInfo) {}
+        WholeBodyModelRbdConversions_(std::move(pinocchioInterface), WholeBodyModelInfo) {}
 
   /**
    * @brief Convert OCS2 switched model state to generalized coordinate and generalized velocity used by RaiSim.
@@ -124,7 +124,7 @@ class LeggedRobotRaisimConversions final {
    * @param [in] verbose : Flag to determine whether to print out the loaded settings or not.
    */
   void loadSettings(const std::string& fileName, const std::string& fieldName, bool verbose = true) {
-    centroidalModelRbdConversions_.loadSettings(fileName, fieldName, verbose);
+    WholeBodyModelRbdConversions_.loadSettings(fileName, fieldName, verbose);
   }
 
  protected:
@@ -153,7 +153,7 @@ class LeggedRobotRaisimConversions final {
  private:
   const bool check_;
   Eigen::Vector3d continuousOrientation_;
-  CentroidalModelRbdConversions centroidalModelRbdConversions_;
+  WholeBodyModelRbdConversions WholeBodyModelRbdConversions_;
   const raisim::HeightMap* terrainPtr_ = nullptr;
 };
 

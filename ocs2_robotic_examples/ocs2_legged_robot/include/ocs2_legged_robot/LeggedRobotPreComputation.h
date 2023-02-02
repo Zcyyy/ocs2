@@ -35,7 +35,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <ocs2_core/PreComputation.h>
 #include <ocs2_pinocchio_interface/PinocchioInterface.h>
 
-#include <ocs2_centroidal_model/CentroidalModelPinocchioMapping.h>
+#include <ocs2_whole_body_model/WholeBodyModelPinocchioMapping.h>
 
 #include "ocs2_legged_robot/common/ModelSettings.h"
 #include "ocs2_legged_robot/constraint/EndEffectorLinearConstraint.h"
@@ -47,7 +47,7 @@ namespace legged_robot {
 /** Callback for caching and reference update */
 class LeggedRobotPreComputation : public PreComputation {
  public:
-  LeggedRobotPreComputation(PinocchioInterface pinocchioInterface, CentroidalModelInfo info,
+  LeggedRobotPreComputation(PinocchioInterface pinocchioInterface, WholeBodyModelInfo info,
                             const SwingTrajectoryPlanner& swingTrajectoryPlanner, ModelSettings settings);
   ~LeggedRobotPreComputation() override = default;
 
@@ -64,7 +64,7 @@ class LeggedRobotPreComputation : public PreComputation {
   LeggedRobotPreComputation(const LeggedRobotPreComputation& other) = default;
 
   PinocchioInterface pinocchioInterface_;
-  CentroidalModelInfo info_;
+  WholeBodyModelInfo info_;
   const SwingTrajectoryPlanner* swingTrajectoryPlannerPtr_;
   const ModelSettings settings_;
 

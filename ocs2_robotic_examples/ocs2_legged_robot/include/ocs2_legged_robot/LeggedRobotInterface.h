@@ -30,7 +30,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 
 // ocs2
-#include <ocs2_centroidal_model/FactoryFunctions.h>
 #include <ocs2_core/Types.h>
 #include <ocs2_core/penalties/Penalties.h>
 #include <ocs2_ddp/DDP_Settings.h>
@@ -45,6 +44,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "ocs2_legged_robot/common/ModelSettings.h"
 #include "ocs2_legged_robot/initialization/LeggedRobotInitializer.h"
 #include "ocs2_legged_robot/reference_manager/SwitchedModelReferenceManager.h"
+#include <ocs2_whole_body_model/FactoryFunctions.h>
 
 /**
  * LeggedRobotInterface class
@@ -82,7 +82,7 @@ class LeggedRobotInterface final : public RobotInterface {
   const vector_t& getInitialState() const { return initialState_; }
   const RolloutBase& getRollout() const { return *rolloutPtr_; }
   PinocchioInterface& getPinocchioInterface() { return *pinocchioInterfacePtr_; }
-  const CentroidalModelInfo& getCentroidalModelInfo() const { return centroidalModelInfo_; }
+  const WholeBodyModelInfo& getWholeBodyModelInfo() const { return WholeBodyModelInfo_; }
   std::shared_ptr<SwitchedModelReferenceManager> getSwitchedModelReferenceManagerPtr() const { return referenceManagerPtr_; }
 
   const LeggedRobotInitializer& getInitializer() const override { return *initializerPtr_; }
@@ -93,8 +93,8 @@ class LeggedRobotInterface final : public RobotInterface {
 
   std::shared_ptr<GaitSchedule> loadGaitSchedule(const std::string& file, bool verbose) const;
 
-  std::unique_ptr<StateInputCost> getBaseTrackingCost(const std::string& taskFile, const CentroidalModelInfo& info, bool verbose);
-  matrix_t initializeInputCostWeight(const std::string& taskFile, const CentroidalModelInfo& info);
+  std::unique_ptr<StateInputCost> getBaseTrackingCost(const std::string& taskFile, const WholeBodyModelInfo& info, bool verbose);
+  matrix_t initializeInputCostWeight(const std::string& taskFile, const WholeBodyModelInfo& info);
 
   std::pair<scalar_t, RelaxedBarrierPenalty::Config> loadFrictionConeSettings(const std::string& taskFile, bool verbose) const;
   std::unique_ptr<StateInputConstraint> getFrictionConeConstraint(size_t contactPointIndex, scalar_t frictionCoefficient);
@@ -114,7 +114,7 @@ class LeggedRobotInterface final : public RobotInterface {
   const bool useHardFrictionConeConstraint_;
 
   std::unique_ptr<PinocchioInterface> pinocchioInterfacePtr_;
-  CentroidalModelInfo centroidalModelInfo_;
+  WholeBodyModelInfo WholeBodyModelInfo_;
 
   std::unique_ptr<OptimalControlProblem> problemPtr_;
   std::shared_ptr<SwitchedModelReferenceManager> referenceManagerPtr_;

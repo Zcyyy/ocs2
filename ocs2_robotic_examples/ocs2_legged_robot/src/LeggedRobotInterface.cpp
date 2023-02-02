@@ -29,6 +29,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <iostream>
 #include <string>
+#include <memory.h>
 
 #include <pinocchio/fwd.hpp>  // forward declarations must be included first.
 
@@ -38,9 +39,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "ocs2_legged_robot/LeggedRobotInterface.h"
 
-#include <ocs2_centroidal_model/AccessHelperFunctions.h>
-#include <ocs2_centroidal_model/CentroidalModelPinocchioMapping.h>
-#include <ocs2_centroidal_model/ModelHelperFunctions.h>
+#include <ocs2_whole_body_model/AccessHelperFunctions.h>
+#include <ocs2_whole_body_model/WholeBodyModelPinocchioMapping.h>
+#include <ocs2_whole_body_model/ModelHelperFunctions.h>
 #include <ocs2_core/misc/Display.h>
 #include <ocs2_core/soft_constraint/StateInputSoftConstraint.h>
 #include <ocs2_oc/synchronized_module/SolverSynchronizedModule.h>
@@ -104,7 +105,7 @@ LeggedRobotInterface::LeggedRobotInterface(const std::string& taskFile, const st
   setupOptimalConrolProblem(taskFile, urdfFile, referenceFile, verbose);
 
   // initial state
-  initialState_.setZero(centroidalModelInfo_.stateDim);
+  initialState_.setZero(WholeBodyModelInfo_.stateDim);
   loadData::loadEigenMatrix(taskFile, "initialState", initialState_);
 }
 
@@ -114,12 +115,12 @@ LeggedRobotInterface::LeggedRobotInterface(const std::string& taskFile, const st
 void LeggedRobotInterface::setupOptimalConrolProblem(const std::string& taskFile, const std::string& urdfFile,
                                                      const std::string& referenceFile, bool verbose) {
   // PinocchioInterface
-  pinocchioInterfacePtr_.reset(new PinocchioInterface(centroidal_model::createPinocchioInterface(urdfFile, modelSettings_.jointNames)));
+  pinocchioInterfacePtr_.reset(new PinocchioInterface(wholebody_model::createPinocchioInterface(urdfFile, modelSettings_.jointNames)));
 
   // CentroidalModelInfo
-  centroidalModelInfo_ = centroidal_model::createCentroidalModelInfo(
-      *pinocchioInterfacePtr_, centroidal_model::loadCentroidalType(taskFile),
-      centroidal_model::loadDefaultJointState(pinocchioInterfacePtr_->getModel().nq - 6, referenceFile), modelSettings_.contactNames3DoF,
+  WholeBodyModelInfo_ = wholebody_model::createWholeBodyModelInfo(
+      *pinocchioInterfacePtr_, wholebody_model::loadWholeBodyType(taskFile),
+      wholebody_model::loadDefaultJointState(pinocchioInterfacePtr_->getModel().nq - 6, referenceFile), modelSettings_.contactNames3DoF,
       modelSettings_.contactNames6DoF);
 
   // Swing trajectory planner
@@ -141,13 +142,13 @@ void LeggedRobotInterface::setupOptimalConrolProblem(const std::string& taskFile
     throw std::runtime_error("[LeggedRobotInterface::setupOptimalConrolProblem] The analytical dynamics class is not yet implemented!");
   } else {
     const std::string modelName = "dynamics";
-    dynamicsPtr.reset(new LeggedRobotDynamicsAD(*pinocchioInterfacePtr_, centroidalModelInfo_, modelName, modelSettings_));
+    dynamicsPtr.reset(new LeggedRobotDynamicsAD(*pinocchioInterfacePtr_, WholeBodyModelInfo_, modelName, modelSettings_));
   }
 
   problemPtr_->dynamicsPtr = std::move(dynamicsPtr);
 
   // Cost terms
-  problemPtr_->costPtr->add("baseTrackingCost", getBaseTrackingCost(taskFile, centroidalModelInfo_, false));
+  problemPtr_->costPtr->add("baseTrackingCost", getBaseTrackingCost(taskFile, WholeBodyModelInfo_, false));
 
   // Constraint terms
   // friction cone settings
@@ -157,7 +158,7 @@ void LeggedRobotInterface::setupOptimalConrolProblem(const std::string& taskFile
 
   bool useAnalyticalGradientsConstraints = false;
   loadData::loadCppDataType(taskFile, "legged_robot_interface.useAnalyticalGradientsConstraints", useAnalyticalGradientsConstraints);
-  for (size_t i = 0; i < centroidalModelInfo_.numThreeDofContacts; i++) {
+  for (size_t i = 0; i < WholeBodyModelInfo_.numThreeDofContacts; i++) {
     const std::string& footName = modelSettings_.contactNames3DoF[i];
 
     std::unique_ptr<EndEffectorKinematics<scalar_t>> eeKinematicsPtr;
@@ -165,14 +166,14 @@ void LeggedRobotInterface::setupOptimalConrolProblem(const std::string& taskFile
       throw std::runtime_error(
           "[LeggedRobotInterface::setupOptimalConrolProblem] The analytical end-effector linear constraint is not implemented!");
     } else {
-      const auto infoCppAd = centroidalModelInfo_.toCppAd();
-      const CentroidalModelPinocchioMappingCppAd pinocchioMappingCppAd(infoCppAd);
+      const auto infoCppAd = WholeBodyModelInfo_.toCppAd();
+      const WholeBodyModelPinocchioMappingCppAd pinocchioMappingCppAd(infoCppAd);
       auto velocityUpdateCallback = [&infoCppAd](const ad_vector_t& state, PinocchioInterfaceCppAd& pinocchioInterfaceAd) {
-        const ad_vector_t q = centroidal_model::getGeneralizedCoordinates(state, infoCppAd);
-        updateCentroidalDynamics(pinocchioInterfaceAd, infoCppAd, q);
+        const ad_vector_t q = wholebody_model::getGeneralizedCoordinates(state, infoCppAd);
+        updateWholeBodyDynamics(pinocchioInterfaceAd, infoCppAd, q);
       };
       eeKinematicsPtr.reset(new PinocchioEndEffectorKinematicsCppAd(*pinocchioInterfacePtr_, pinocchioMappingCppAd, {footName},
-                                                                    centroidalModelInfo_.stateDim, centroidalModelInfo_.inputDim,
+                                                                    WholeBodyModelInfo_.stateDim, WholeBodyModelInfo_.inputDim,
                                                                     velocityUpdateCallback, footName, modelSettings_.modelFolderCppAd,
                                                                     modelSettings_.recompileLibrariesCppAd, modelSettings_.verboseCppAd));
     }
@@ -191,7 +192,7 @@ void LeggedRobotInterface::setupOptimalConrolProblem(const std::string& taskFile
   }
 
   // Pre-computation
-  problemPtr_->preComputationPtr.reset(new LeggedRobotPreComputation(*pinocchioInterfacePtr_, centroidalModelInfo_,
+  problemPtr_->preComputationPtr.reset(new LeggedRobotPreComputation(*pinocchioInterfacePtr_, WholeBodyModelInfo_,
                                                                      *referenceManagerPtr_->getSwingTrajectoryPlanner(), modelSettings_));
 
   // Rollout
@@ -199,7 +200,7 @@ void LeggedRobotInterface::setupOptimalConrolProblem(const std::string& taskFile
 
   // Initialization
   constexpr bool extendNormalizedMomentum = true;
-  initializerPtr_.reset(new LeggedRobotInitializer(centroidalModelInfo_, *referenceManagerPtr_, extendNormalizedMomentum));
+  initializerPtr_.reset(new LeggedRobotInitializer(WholeBodyModelInfo_, *referenceManagerPtr_, extendNormalizedMomentum));
 }
 
 /******************************************************************************************************/
@@ -235,15 +236,15 @@ std::shared_ptr<GaitSchedule> LeggedRobotInterface::loadGaitSchedule(const std::
 /******************************************************************************************************/
 /******************************************************************************************************/
 /******************************************************************************************************/
-matrix_t LeggedRobotInterface::initializeInputCostWeight(const std::string& taskFile, const CentroidalModelInfo& info) {
+matrix_t LeggedRobotInterface::initializeInputCostWeight(const std::string& taskFile, const WholeBodyModelInfo& info) {
   const size_t totalContactDim = 3 * info.numThreeDofContacts;
 
-  vector_t initialState(centroidalModelInfo_.stateDim);
+  vector_t initialState(WholeBodyModelInfo_.stateDim);
   loadData::loadEigenMatrix(taskFile, "initialState", initialState);
 
   const auto& model = pinocchioInterfacePtr_->getModel();
   auto& data = pinocchioInterfacePtr_->getData();
-  const auto q = centroidal_model::getGeneralizedCoordinates(initialState, centroidalModelInfo_);
+  const auto q = wholebody_model::getGeneralizedCoordinates(initialState, WholeBodyModelInfo_);
   pinocchio::computeJointJacobians(model, data, q);
   pinocchio::updateFramePlacements(model, data);
 
@@ -272,7 +273,7 @@ matrix_t LeggedRobotInterface::initializeInputCostWeight(const std::string& task
 /******************************************************************************************************/
 /******************************************************************************************************/
 /******************************************************************************************************/
-std::unique_ptr<StateInputCost> LeggedRobotInterface::getBaseTrackingCost(const std::string& taskFile, const CentroidalModelInfo& info,
+std::unique_ptr<StateInputCost> LeggedRobotInterface::getBaseTrackingCost(const std::string& taskFile, const WholeBodyModelInfo& info,
                                                                           bool verbose) {
   matrix_t Q(info.stateDim, info.stateDim);
   loadData::loadEigenMatrix(taskFile, "Q", Q);
@@ -321,7 +322,7 @@ std::unique_ptr<StateInputConstraint> LeggedRobotInterface::getFrictionConeConst
                                                                                       scalar_t frictionCoefficient) {
   FrictionConeConstraint::Config frictionConeConConfig(frictionCoefficient);
   return std::make_unique<FrictionConeConstraint>(*referenceManagerPtr_, std::move(frictionConeConConfig), contactPointIndex,
-                                                  centroidalModelInfo_);
+                                                  WholeBodyModelInfo_);
 }
 
 /******************************************************************************************************/
@@ -337,7 +338,7 @@ std::unique_ptr<StateInputCost> LeggedRobotInterface::getFrictionConeSoftConstra
 /******************************************************************************************************/
 /******************************************************************************************************/
 std::unique_ptr<StateInputConstraint> LeggedRobotInterface::getZeroForceConstraint(size_t contactPointIndex) {
-  return std::make_unique<ZeroForceConstraint>(*referenceManagerPtr_, contactPointIndex, centroidalModelInfo_);
+  return std::make_unique<ZeroForceConstraint>(*referenceManagerPtr_, contactPointIndex, WholeBodyModelInfo_);
 }
 
 /******************************************************************************************************/

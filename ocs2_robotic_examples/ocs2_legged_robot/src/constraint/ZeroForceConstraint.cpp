@@ -29,7 +29,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "ocs2_legged_robot/constraint/ZeroForceConstraint.h"
 
-#include <ocs2_centroidal_model/AccessHelperFunctions.h>
+#include <ocs2_whole_body_model/AccessHelperFunctions.h>
 
 namespace ocs2 {
 namespace legged_robot {
@@ -38,7 +38,7 @@ namespace legged_robot {
 /******************************************************************************************************/
 /******************************************************************************************************/
 ZeroForceConstraint::ZeroForceConstraint(const SwitchedModelReferenceManager& referenceManager, size_t contactPointIndex,
-                                         CentroidalModelInfo info)
+                                         WholeBodyModelInfo info)
     : StateInputConstraint(ConstraintOrder::Linear),
       referenceManagerPtr_(&referenceManager),
       contactPointIndex_(contactPointIndex),
@@ -55,7 +55,7 @@ bool ZeroForceConstraint::isActive(scalar_t time) const {
 /******************************************************************************************************/
 /******************************************************************************************************/
 vector_t ZeroForceConstraint::getValue(scalar_t time, const vector_t& state, const vector_t& input, const PreComputation& preComp) const {
-  return centroidal_model::getContactForces(input, contactPointIndex_, info_);
+  return wholebody_model::getContactForces(input, contactPointIndex_, info_);
 }
 
 /******************************************************************************************************/

@@ -30,7 +30,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <ros/init.h>
 #include <ros/package.h>
 
-#include <ocs2_centroidal_model/CentroidalModelPinocchioMapping.h>
+#include <ocs2_whole_body_model/WholeBodyModelPinocchioMapping.h>
 #include <ocs2_pinocchio_interface/PinocchioEndEffectorKinematics.h>
 #include <ocs2_raisim_core/RaisimRollout.h>
 #include <ocs2_raisim_ros/RaisimHeightmapRosConverter.h>
@@ -63,7 +63,7 @@ int main(int argc, char** argv) {
   LeggedRobotInterface interface(taskFile, urdfFile, referenceFile);
 
   // raisim rollout
-  LeggedRobotRaisimConversions conversions(interface.getPinocchioInterface(), interface.getCentroidalModelInfo(),
+  LeggedRobotRaisimConversions conversions(interface.getPinocchioInterface(), interface.getWholeBodyModelInfo(),
                                            interface.getInitialState());
   RaisimRolloutSettings raisimRolloutSettings(raisimFile, "rollout", true);
   conversions.loadSettings(raisimFile, "rollout", true);
@@ -98,11 +98,11 @@ int main(int argc, char** argv) {
   mrt.launchNodes(nodeHandle);
 
   // visualization
-  CentroidalModelPinocchioMapping pinocchioMapping(interface.getCentroidalModelInfo());
+  WholeBodyModelPinocchioMapping pinocchioMapping(interface.getWholeBodyModelInfo());
   PinocchioEndEffectorKinematics endEffectorKinematics(interface.getPinocchioInterface(), pinocchioMapping,
                                                        interface.modelSettings().contactNames3DoF);
   auto leggedRobotRaisimVisualizer = std::make_shared<LeggedRobotRaisimVisualizer>(
-      interface.getPinocchioInterface(), interface.getCentroidalModelInfo(), endEffectorKinematics, nodeHandle);
+      interface.getPinocchioInterface(), interface.getWholeBodyModelInfo(), endEffectorKinematics, nodeHandle);
   leggedRobotRaisimVisualizer->updateTerrain();
 
   // legged robot dummy
@@ -114,7 +114,7 @@ int main(int argc, char** argv) {
   initObservation.mode = ModeNumber::STANCE;
   initObservation.time = 0.0;
   initObservation.state = interface.getInitialState();
-  initObservation.input = vector_t::Zero(interface.getCentroidalModelInfo().inputDim);
+  initObservation.input = vector_t::Zero(interface.getWholeBodyModelInfo().inputDim);
 
   // initial command
   TargetTrajectories initTargetTrajectories({initObservation.time}, {initObservation.state}, {initObservation.input});

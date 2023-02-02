@@ -29,7 +29,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "ocs2_legged_robot/constraint/FrictionConeConstraint.h"
 
-#include <ocs2_centroidal_model/AccessHelperFunctions.h>
+#include <ocs2_whole_body_model/AccessHelperFunctions.h>
 
 namespace ocs2 {
 namespace legged_robot {
@@ -38,7 +38,7 @@ namespace legged_robot {
 /******************************************************************************************************/
 /******************************************************************************************************/
 FrictionConeConstraint::FrictionConeConstraint(const SwitchedModelReferenceManager& referenceManager, Config config,
-                                               size_t contactPointIndex, CentroidalModelInfo info)
+                                               size_t contactPointIndex, WholeBodyModelInfo info)
     : StateInputConstraint(ConstraintOrder::Quadratic),
       referenceManagerPtr_(&referenceManager),
       config_(std::move(config)),
@@ -65,7 +65,7 @@ bool FrictionConeConstraint::isActive(scalar_t time) const {
 /******************************************************************************************************/
 vector_t FrictionConeConstraint::getValue(scalar_t time, const vector_t& state, const vector_t& input,
                                           const PreComputation& preComp) const {
-  const auto forcesInWorldFrame = centroidal_model::getContactForces(input, contactPointIndex_, info_);
+  const auto forcesInWorldFrame = wholebody_model::getContactForces(input, contactPointIndex_, info_);
   const vector3_t localForce = t_R_w * forcesInWorldFrame;
   return coneConstraint(localForce);
 }
@@ -76,7 +76,7 @@ vector_t FrictionConeConstraint::getValue(scalar_t time, const vector_t& state, 
 VectorFunctionLinearApproximation FrictionConeConstraint::getLinearApproximation(scalar_t time, const vector_t& state,
                                                                                  const vector_t& input,
                                                                                  const PreComputation& preComp) const {
-  const vector3_t forcesInWorldFrame = centroidal_model::getContactForces(input, contactPointIndex_, info_);
+  const vector3_t forcesInWorldFrame = wholebody_model::getContactForces(input, contactPointIndex_, info_);
   const vector3_t localForce = t_R_w * forcesInWorldFrame;
 
   const auto localForceDerivatives = computeLocalForceDerivatives(forcesInWorldFrame);
@@ -96,7 +96,7 @@ VectorFunctionLinearApproximation FrictionConeConstraint::getLinearApproximation
 VectorFunctionQuadraticApproximation FrictionConeConstraint::getQuadraticApproximation(scalar_t time, const vector_t& state,
                                                                                        const vector_t& input,
                                                                                        const PreComputation& preComp) const {
-  const vector3_t forcesInWorldFrame = centroidal_model::getContactForces(input, contactPointIndex_, info_);
+  const vector3_t forcesInWorldFrame = wholebody_model::getContactForces(input, contactPointIndex_, info_);
   const vector3_t localForce = t_R_w * forcesInWorldFrame;
 
   const auto localForceDerivatives = computeLocalForceDerivatives(forcesInWorldFrame);

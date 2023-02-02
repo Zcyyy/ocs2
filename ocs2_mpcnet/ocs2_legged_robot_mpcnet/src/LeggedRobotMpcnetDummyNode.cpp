@@ -91,7 +91,7 @@ int main(int argc, char** argv) {
   std::unique_ptr<LeggedRobotRaisimConversions> conversions;
   if (useRaisim) {
     conversions.reset(new LeggedRobotRaisimConversions(leggedRobotInterface.getPinocchioInterface(),
-                                                       leggedRobotInterface.getCentroidalModelInfo(),
+                                                       leggedRobotInterface.getWholeBodyModelInfo(),
                                                        leggedRobotInterface.getInitialState()));
     RaisimRolloutSettings raisimRolloutSettings(raisimFile, "rollout", true);
     conversions->loadSettings(raisimFile, "rollout", true);
@@ -124,17 +124,17 @@ int main(int argc, char** argv) {
   auto mpcnetDummyObserverRosPtr = std::make_shared<ocs2::mpcnet::MpcnetDummyObserverRos>(nodeHandle, robotName);
 
   // visualization
-  CentroidalModelPinocchioMapping pinocchioMapping(leggedRobotInterface.getCentroidalModelInfo());
+  WholeBodyModelPinocchioMapping pinocchioMapping(leggedRobotInterface.getWholeBodyModelInfo());
   PinocchioEndEffectorKinematics endEffectorKinematics(leggedRobotInterface.getPinocchioInterface(), pinocchioMapping,
                                                        leggedRobotInterface.modelSettings().contactNames3DoF);
   std::shared_ptr<LeggedRobotVisualizer> leggedRobotVisualizerPtr;
   if (useRaisim) {
     leggedRobotVisualizerPtr.reset(new LeggedRobotRaisimVisualizer(
-        leggedRobotInterface.getPinocchioInterface(), leggedRobotInterface.getCentroidalModelInfo(), endEffectorKinematics, nodeHandle));
+        leggedRobotInterface.getPinocchioInterface(), leggedRobotInterface.getWholeBodyModelInfo(), endEffectorKinematics, nodeHandle));
     static_cast<LeggedRobotRaisimVisualizer*>(leggedRobotVisualizerPtr.get())->updateTerrain();
   } else {
     leggedRobotVisualizerPtr.reset(new LeggedRobotVisualizer(
-        leggedRobotInterface.getPinocchioInterface(), leggedRobotInterface.getCentroidalModelInfo(), endEffectorKinematics, nodeHandle));
+        leggedRobotInterface.getPinocchioInterface(), leggedRobotInterface.getWholeBodyModelInfo(), endEffectorKinematics, nodeHandle));
   }
 
   // MPC-Net dummy loop ROS
@@ -151,7 +151,7 @@ int main(int argc, char** argv) {
   systemObservation.mode = ModeNumber::STANCE;
   systemObservation.time = 0.0;
   systemObservation.state = leggedRobotInterface.getInitialState();
-  systemObservation.input = vector_t::Zero(leggedRobotInterface.getCentroidalModelInfo().inputDim);
+  systemObservation.input = vector_t::Zero(leggedRobotInterface.getWholeBodyModelInfo().inputDim);
 
   // initial target trajectories
   const TargetTrajectories targetTrajectories({systemObservation.time}, {systemObservation.state}, {systemObservation.input});

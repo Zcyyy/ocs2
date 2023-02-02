@@ -73,7 +73,7 @@ LeggedRobotMpcnetInterface::LeggedRobotMpcnetInterface(size_t nDataGenerationThr
       RaisimRolloutSettings raisimRolloutSettings(raisimFile, "rollout");
       raisimRolloutSettings.portNumber_ += i;
       leggedRobotRaisimConversionsPtrs_.push_back(std::make_unique<LeggedRobotRaisimConversions>(
-          leggedRobotInterfacePtrs_[i]->getPinocchioInterface(), leggedRobotInterfacePtrs_[i]->getCentroidalModelInfo(),
+          leggedRobotInterfacePtrs_[i]->getPinocchioInterface(), leggedRobotInterfacePtrs_[i]->getWholeBodyModelInfo(),
           leggedRobotInterfacePtrs_[i]->getInitialState()));
       leggedRobotRaisimConversionsPtrs_[i]->loadSettings(raisimFile, "rollout", true);
       rolloutPtrs.push_back(std::make_unique<RaisimRollout>(

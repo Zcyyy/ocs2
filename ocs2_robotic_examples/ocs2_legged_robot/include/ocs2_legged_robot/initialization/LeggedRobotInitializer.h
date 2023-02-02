@@ -29,7 +29,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 
-#include <ocs2_centroidal_model/CentroidalModelInfo.h>
+#include <ocs2_whole_body_model/WholeBodyModelInfo.h>
 #include <ocs2_core/initialization/Initializer.h>
 
 #include "ocs2_legged_robot/reference_manager/SwitchedModelReferenceManager.h"
@@ -45,8 +45,7 @@ class LeggedRobotInitializer final : public Initializer {
    * @param [in] referenceManager : Switched system reference manager.
    * @param [in] extendNormalizedMomentum: If true, it extrapolates the normalized momenta; otherwise sets them to zero.
    */
-  LeggedRobotInitializer(CentroidalModelInfo info, const SwitchedModelReferenceManager& referenceManager,
-                         bool extendNormalizedMomentum = false);
+  LeggedRobotInitializer(WholeBodyModelInfo info, const SwitchedModelReferenceManager& referenceManager, bool extendNormalizedMomentum = false);
 
   ~LeggedRobotInitializer() override = default;
   LeggedRobotInitializer* clone() const override;
@@ -56,7 +55,7 @@ class LeggedRobotInitializer final : public Initializer {
  private:
   LeggedRobotInitializer(const LeggedRobotInitializer& other) = default;
 
-  const CentroidalModelInfo info_;
+  const WholeBodyModelInfo info_;
   const SwitchedModelReferenceManager* referenceManagerPtr_;
   const bool extendNormalizedMomentum_;
 };

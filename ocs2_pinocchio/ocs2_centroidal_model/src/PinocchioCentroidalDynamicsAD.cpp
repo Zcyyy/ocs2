@@ -110,7 +110,9 @@ VectorFunctionLinearApproximation PinocchioCentroidalDynamicsAD::getLinearApprox
   VectorFunctionLinearApproximation approx;
   approx.f = systemFlowMapCppAdInterfacePtr_->getFunctionValue(stateInput);
   const matrix_t dynamicsJacobian = systemFlowMapCppAdInterfacePtr_->getJacobian(stateInput);
+  //std::cout << dynamicsJacobian << std::endl;
   approx.dfdx = dynamicsJacobian.leftCols(state.rows());
+  //std::cout << approx.dfdu << std::endl;
   approx.dfdu = dynamicsJacobian.rightCols(input.rows());
   return approx;
 }
