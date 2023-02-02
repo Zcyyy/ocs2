@@ -31,6 +31,7 @@ void updateWholeBodyDynamics(PinocchioInterfaceTpl<SCALAR_T>& interface, const W
   const auto& model = interface.getModel();
   auto& data = interface.getData();
 
+  //std::cout << info.wholebodyModelType << std::endl;
   switch (info.wholebodyModelType) {
     case WholeBodyModelType::WholeBodyDynamics: {
       std::cout << " dooooo something??????? " << std::endl;

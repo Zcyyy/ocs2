@@ -78,7 +78,8 @@ auto WholeBodyModelPinocchioMappingTpl<SCALAR>::getPinocchioJointVelocity(const 
 
   Eigen::Matrix<SCALAR, 6, 1> momentum = info.totalMass * wholebody_model::getNormalizedMomentum(state, info);
   if (info.wholebodyModelType == WholeBodyModelType::WholeBodyDynamics) {
-    std::cout << "what should i do? " << std::endl;
+    //std::cout << "what should i do? " << std::endl;
+    momentum.noalias() -= A.rightCols(info.actuatedDofNum) * jointVelocities;
   }
   /*
   if (info.wholebodyModelType == WholeBodyModelType::FullCentroidalDynamics) {

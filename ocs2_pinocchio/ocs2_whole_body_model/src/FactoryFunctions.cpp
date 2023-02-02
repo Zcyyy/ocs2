@@ -88,11 +88,11 @@ WholeBodyModelInfo createWholeBodyModelInfo(const PinocchioInterface& interface,
   info.qPinocchioNominal << vector_t::Zero(6), nominalJointAngles;
   for(int i = 0; i < model.names.size(); i++)
   {
-    std::cout << "**********" << std::endl;
-    std::cout << model.names[i] << std::endl;
-    std::cout << "**********" << std::endl;
-    std::cout << model.inertias[i].inertia().matrix() << std::endl;
-    //info.WholeBodyInertiaNominal.push_back(std::make_pair(model.names[i], model.inertias[i].inertia().matrix().cast<Eigen::Matrix<scalar_t, 3, 1>>()));
+    //std::cout << "**********" << std::endl;
+    //std::cout << model.names[i] << std::endl;
+    //std::cout << "**********" << std::endl;
+    //std::cout << model.inertias[i].inertia().matrix().cast<scalar_t>() << std::endl;
+    info.WholeBodyInertiaNominal.push_back(std::make_pair(model.names[i], model.inertias[i].inertia().matrix().cast<scalar_t>()));
   }
   info.comToBasePositionNominal.setZero();
   if (info.wholebodyModelType == WholeBodyModelType::WholeBodyDynamics) {

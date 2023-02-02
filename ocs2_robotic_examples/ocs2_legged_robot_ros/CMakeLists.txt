@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.0.2)
 project(ocs2_legged_robot_ros)
 
+set(CMAKE_TOPLEVEL TRUE)
+set(CMAKE_BUILD_TYPE "Debug")
 # Generate compile_commands.json for clang tools
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 

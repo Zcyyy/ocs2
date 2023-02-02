@@ -1,4 +1,5 @@
 centroidalModelType             1      // 0: FullCentroidalDynamics, 1: Single Rigid Body Dynamics
+WholeBodyModelType              0
   
 legged_robot_interface
 {

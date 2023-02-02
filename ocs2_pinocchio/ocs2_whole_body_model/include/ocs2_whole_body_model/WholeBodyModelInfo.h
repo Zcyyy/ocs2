@@ -38,7 +38,7 @@ struct WholeBodyModelInfoTpl{
     using scalar_t = SCALAR;
     using vector_t = Eigen::Matrix<SCALAR, Eigen::Dynamic, 1>;
     using vector3_t = Eigen::Matrix<SCALAR, 3, 1>;
-    using matrix3_t = Eigen::Matrix<SCALAR, 3, 1>;
+    using matrix3_t = Eigen::Matrix<SCALAR, 3, 3>;
 
     using robotMassTpl = std::pair<std::string, scalar_t>;
     using WholeBodyInertiaNominalTpl = std::pair<const std::string, matrix3_t>;
