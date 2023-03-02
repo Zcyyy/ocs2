@@ -58,6 +58,7 @@ vector_t PinocchioWholeBodyDynamics::getValue(scalar_t time, const vector_t& sta
 
   vector_t f(info.stateDim);
   f << getNormalizedWholeBodyMomentumRate(interface, info, input), mapping_.getPinocchioJointVelocity(state, input);
+  std::cout << f << std::endl;
 
   return f;
 }

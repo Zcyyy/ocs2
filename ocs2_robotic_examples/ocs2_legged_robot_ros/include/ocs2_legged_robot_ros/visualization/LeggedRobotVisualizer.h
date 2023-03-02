@@ -33,7 +33,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <ros/node_handle.h>
 #include <tf/transform_broadcaster.h>
 
-#include <ocs2_whole_body_model/WholeBodyModelInfo.h>
+#include <ocs2_centroidal_model/CentroidalModelInfo.h>
 #include <ocs2_core/Types.h>
 #include <ocs2_legged_robot/common/Types.h>
 #include <ocs2_pinocchio_interface/PinocchioEndEffectorKinematics.h>
@@ -62,7 +62,7 @@ class LeggedRobotVisualizer : public DummyObserver {
    * @param n
    * @param maxUpdateFrequency : maximum publish frequency measured in MPC time.
    */
-  LeggedRobotVisualizer(PinocchioInterface pinocchioInterface, WholeBodyModelInfo WholeBodyModelInfo,
+  LeggedRobotVisualizer(PinocchioInterface pinocchioInterface, CentroidalModelInfo centroidalModelInfo,
                         const PinocchioEndEffectorKinematics& endEffectorKinematics, ros::NodeHandle& nodeHandle,
                         scalar_t maxUpdateFrequency = 100.0);
 
@@ -89,7 +89,7 @@ class LeggedRobotVisualizer : public DummyObserver {
                                const std::vector<vector3_t>& feetForces) const;
 
   PinocchioInterface pinocchioInterface_;
-  const WholeBodyModelInfo WholeBodyModelInfo_;
+  const CentroidalModelInfo centroidalModelInfo_;
   std::unique_ptr<PinocchioEndEffectorKinematics> endEffectorKinematicsPtr_;
 
   tf::TransformBroadcaster tfBroadcaster_;

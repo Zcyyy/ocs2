@@ -43,7 +43,7 @@ namespace legged_robot {
 /******************************************************************************************************/
 /******************************************************************************************************/
 /******************************************************************************************************/
-LeggedRobotPreComputation::LeggedRobotPreComputation(PinocchioInterface pinocchioInterface, WholeBodyModelInfo info,
+LeggedRobotPreComputation::LeggedRobotPreComputation(PinocchioInterface pinocchioInterface, CentroidalModelInfo info,
                                                      const SwingTrajectoryPlanner& swingTrajectoryPlanner, ModelSettings settings)
     : pinocchioInterface_(std::move(pinocchioInterface)),
       info_(std::move(info)),

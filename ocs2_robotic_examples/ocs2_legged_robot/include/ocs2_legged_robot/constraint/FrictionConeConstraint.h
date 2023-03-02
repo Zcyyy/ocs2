@@ -29,7 +29,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 
-#include <ocs2_whole_body_model/WholeBodyModelInfo.h>
+#include <ocs2_centroidal_model/CentroidalModelInfo.h>
 #include <ocs2_core/constraint/StateInputConstraint.h>
 
 #include "ocs2_legged_robot/common/Types.h"
@@ -88,7 +88,7 @@ class FrictionConeConstraint final : public StateInputConstraint {
    * @param [in] info : The centroidal model information.
    */
   FrictionConeConstraint(const SwitchedModelReferenceManager& referenceManager, Config config, size_t contactPointIndex,
-                         WholeBodyModelInfo info);
+                         CentroidalModelInfo info);
 
   ~FrictionConeConstraint() override = default;
   FrictionConeConstraint* clone() const override { return new FrictionConeConstraint(*this); }
@@ -137,7 +137,7 @@ class FrictionConeConstraint final : public StateInputConstraint {
 
   const Config config_;
   const size_t contactPointIndex_;
-  const WholeBodyModelInfo info_;
+  const CentroidalModelInfo info_;
 
   // rotation world to terrain
   matrix3_t t_R_w = matrix3_t::Identity();

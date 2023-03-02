@@ -73,7 +73,7 @@ WholeBodyModelInfo createWholeBodyModelInfo(const PinocchioInterface& interface,
   info.actuatedDofNum = info.generalizedCoordinatesNum - 6;
   info.stateDim = info.generalizedCoordinatesNum + 6;
   info.inputDim = info.actuatedDofNum + 3 * info.numThreeDofContacts + 6 * info.numSixDofContacts;
-  info.totalMass = pinocchio::computeTotalMass(model);
+  info.totalMass = pinocchio::computeTotalMass(model)/100.0;
 
   for (const auto& name : threeDofContactNames) {
     info.endEffectorFrameIndices.push_back(model.getBodyId(name));

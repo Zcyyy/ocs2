@@ -31,11 +31,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <ros/package.h>
 
 #include <ocs2_centroidal_model/CentroidalModelPinocchioMapping.h>
-#include <ocs2_legged_robot/LeggedRobotInterface.h>
+#include <ocs2_legged_robot_legged/LeggedRobotInterface.h>
 #include <ocs2_legged_robot_raisim/LeggedRobotRaisimConversions.h>
 #include <ocs2_legged_robot_raisim/LeggedRobotRaisimVisualizer.h>
-#include <ocs2_legged_robot_ros/gait/GaitReceiver.h>
-#include <ocs2_legged_robot_ros/visualization/LeggedRobotVisualizer.h>
+#include <ocs2_legged_robot_ros_legged/gait/GaitReceiver.h>
+#include <ocs2_legged_robot_ros_legged/visualization/LeggedRobotVisualizer.h>
 #include <ocs2_mpcnet_core/control/MpcnetOnnxController.h>
 #include <ocs2_mpcnet_core/dummy/MpcnetDummyLoopRos.h>
 #include <ocs2_mpcnet_core/dummy/MpcnetDummyObserverRos.h>

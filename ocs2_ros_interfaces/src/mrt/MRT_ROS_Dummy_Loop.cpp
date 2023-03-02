@@ -90,7 +90,6 @@ void MRT_ROS_Dummy_Loop::synchronizedDummyLoop(const SystemObservation& initObse
 
   ros::Rate simRate(mrtDesiredFrequency_);
   while (ros::ok() && ros::master::check()) {
-    std::cout << "### Current time " << currentObservation.time << "\n";
 
     // Trigger MRT callbacks
     mrt_.spinMRT();
@@ -116,6 +115,8 @@ void MRT_ROS_Dummy_Loop::synchronizedDummyLoop(const SystemObservation& initObse
       std::cout << ">>> Observation is published at " << currentObservation.time << "\n";
     }
 
+    std::cout << "*******************************************************************************" << std::endl;
+    std::cout << ">>> MPC policy is valid until " << mrt_.getPolicy().timeTrajectory_.back() << "\n";
     // Update observers
     for (auto& observer : observers_) {
       observer->update(currentObservation, mrt_.getPolicy(), mrt_.getCommand());

@@ -29,7 +29,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 
-#include <ocs2_legged_robot/LeggedRobotInterface.h>
+#include <ocs2_legged_robot_legged/LeggedRobotInterface.h>
 #include <ocs2_mpcnet_core/MpcnetDefinitionBase.h>
 
 namespace ocs2 {

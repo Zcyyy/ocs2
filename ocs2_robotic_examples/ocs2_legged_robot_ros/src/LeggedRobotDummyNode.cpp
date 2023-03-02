@@ -30,7 +30,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <ros/init.h>
 #include <ros/package.h>
 
-#include <ocs2_whole_body_model/WholeBodyModelPinocchioMapping.h>
+#include <ocs2_centroidal_model/CentroidalModelPinocchioMapping.h>
 #include <ocs2_legged_robot/LeggedRobotInterface.h>
 #include <ocs2_pinocchio_interface/PinocchioEndEffectorKinematics.h>
 #include <ocs2_ros_interfaces/mrt/MRT_ROS_Dummy_Loop.h>
@@ -62,11 +62,11 @@ int main(int argc, char** argv) {
   mrt.launchNodes(nodeHandle);
 
   // Visualization
-  WholeBodyModelPinocchioMapping pinocchioMapping(interface.getWholeBodyModelInfo());
+  CentroidalModelPinocchioMapping pinocchioMapping(interface.getCentroidalModelInfo());
   PinocchioEndEffectorKinematics endEffectorKinematics(interface.getPinocchioInterface(), pinocchioMapping,
                                                        interface.modelSettings().contactNames3DoF);
   auto leggedRobotVisualizer = std::make_shared<LeggedRobotVisualizer>(
-      interface.getPinocchioInterface(), interface.getWholeBodyModelInfo(), endEffectorKinematics, nodeHandle);
+      interface.getPinocchioInterface(), interface.getCentroidalModelInfo(), endEffectorKinematics, nodeHandle);
 
   // Dummy legged robot
   MRT_ROS_Dummy_Loop leggedRobotDummySimulator(mrt, interface.mpcSettings().mrtDesiredFrequency_,
@@ -76,7 +76,7 @@ int main(int argc, char** argv) {
   // Initial state
   SystemObservation initObservation;
   initObservation.state = interface.getInitialState();
-  initObservation.input = vector_t::Zero(interface.getWholeBodyModelInfo().inputDim);
+  initObservation.input = vector_t::Zero(interface.getCentroidalModelInfo().inputDim);
   initObservation.mode = ModeNumber::STANCE;
 
   // Initial command

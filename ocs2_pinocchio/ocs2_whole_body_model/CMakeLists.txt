@@ -108,16 +108,16 @@ install(
   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
 )
 
-add_executable(test_dynamics test/test_dynamics.cpp)
-add_dependencies(test_dynamics   
-  ${PROJECT_NAME}
-  ${${PROJECT_NAME}_EXPORTED_TARGETS}
-  ${catkin_EXPORTED_TARGETS})
-target_link_libraries(test_dynamics
-  ${PROJECT_NAME}
-  ${catkin_LIBRARIES}
-)
-target_compile_options(test_dynamics  PRIVATE ${OCS2_CXX_FLAGS})
+#add_executable(test_dynamics test/test_dynamics.cpp)
+#add_dependencies(test_dynamics   
+#  ${PROJECT_NAME}
+#  ${${PROJECT_NAME}_EXPORTED_TARGETS}
+#  ${catkin_EXPORTED_TARGETS})
+#target_link_libraries(test_dynamics
+#  ${PROJECT_NAME}
+#  ${catkin_LIBRARIES}
+#)
+#target_compile_options(test_dynamics  PRIVATE ${OCS2_CXX_FLAGS})
 #############
 ## Testing ##
 #############

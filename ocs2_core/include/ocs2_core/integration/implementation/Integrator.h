@@ -231,6 +231,7 @@ template <class Stepper>
 inline void Integrator<Stepper>::runIntegrateAdaptive(system_func_t system, observer_func_t observer, const vector_t& initialState,
                                                       scalar_t startTime, scalar_t finalTime, scalar_t dtInitial, scalar_t AbsTol,
                                                       scalar_t RelTol) {
+
   vector_t internalStartState = initialState;
   integrateAdaptiveSpecialized<Stepper>(system, observer, internalStartState, startTime, finalTime, dtInitial, AbsTol, RelTol);
 }

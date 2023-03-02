@@ -98,7 +98,6 @@ void SLQ::approximateIntermediateLQ(const DualSolution& dualSolution, PrimalData
       // approximate LQ for the given time index
       ocs2::approximateIntermediateLQ(optimalControlProblemStock_[taskId], timeTrajectory[timeIndex], stateTrajectory[timeIndex],
                                       inputTrajectory[timeIndex], multiplierTrajectory[timeIndex], modelDataTrajectory[timeIndex]);
-
       // checking the numerical properties
       if (settings().checkNumericalStability_) {
         const auto errSize =
@@ -107,8 +106,8 @@ void SLQ::approximateIntermediateLQ(const DualSolution& dualSolution, PrimalData
           throw std::runtime_error("[SLQ::approximateIntermediateLQ] Mismatch in dimensions at intermediate time: " +
                                    std::to_string(timeTrajectory[timeIndex]) + "\n" + errSize);
         }
-        const std::string errProperties = checkDynamicsProperties(modelDataTrajectory[timeIndex]) +
-                                          checkCostProperties(modelDataTrajectory[timeIndex]) +
+        const std::string errProperties = checkDynamicsProperties(modelDataTrajectory[timeIndex]) + 
+                                          checkCostProperties(modelDataTrajectory[timeIndex]) + 
                                           checkConstraintProperties(modelDataTrajectory[timeIndex]);
         if (!errProperties.empty()) {
           throw std::runtime_error("[SLQ::approximateIntermediateLQ] Ill-posed problem at intermediate time: " +

@@ -37,7 +37,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <ocs2_ros_interfaces/mrt/MRT_ROS_Dummy_Loop.h>
 #include <ocs2_ros_interfaces/mrt/MRT_ROS_Interface.h>
 
-#include <ocs2_legged_robot/LeggedRobotInterface.h>
+#include <ocs2_legged_robot_legged/LeggedRobotInterface.h>
 
 #include "ocs2_legged_robot_raisim/LeggedRobotRaisimConversions.h"
 #include "ocs2_legged_robot_raisim/LeggedRobotRaisimVisualizer.h"

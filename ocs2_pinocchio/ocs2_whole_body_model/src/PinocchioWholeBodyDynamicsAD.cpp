@@ -40,22 +40,24 @@ namespace ocs2 {
 PinocchioWholeBodyDynamicsAD::PinocchioWholeBodyDynamicsAD(const PinocchioInterface& pinocchioInterface, const WholeBodyModelInfo& info,
                                                              const std::string& modelName, const std::string& modelFolder,
                                                              bool recompileLibraries, bool verbose) {
+  // 此函数使用pinocchio，CppAD接口将系统状态映射到系统输出
   auto systemFlowMapFunc = [&](const ad_vector_t& x, ad_vector_t& y) {
-    // initialize CppAD interface
+    // 使用pinocchio接口初始化CppAD接口
     auto pinocchioInterfaceCppAd = pinocchioInterface.toCppAd();
 
-    // mapping
+    // 映射
     WholeBodyModelPinocchioMappingCppAd mappingCppAd(info.toCppAd());
     mappingCppAd.setPinocchioInterface(pinocchioInterfaceCppAd);
 
+    // 参数x的前半部分是状态向量state，后半部分为输入向量input
     ad_vector_t state = x.head(info.stateDim);
     ad_vector_t input = x.tail(info.inputDim);
+    // 调用getValueCppAd函数以计算从状态和输入到输出的映射
     y = getValueCppAd(pinocchioInterfaceCppAd, mappingCppAd, state, input);
   };
 
   systemFlowMapCppAdInterfacePtr_.reset(
       new CppAdInterface(systemFlowMapFunc, info.stateDim + info.inputDim, modelName + "_systemFlowMap", modelFolder));
-
   if (recompileLibraries) {
     systemFlowMapCppAdInterfacePtr_->createModels(CppAdInterface::ApproximationOrder::First, verbose);
   } else {
@@ -84,9 +86,7 @@ ad_vector_t PinocchioWholeBodyDynamicsAD::getValueCppAd(PinocchioInterfaceCppAd&
   ad_vector_t stateDerivative(info.stateDim);
 
   // compute center of mass acceleration and derivative of the normalized angular momentum
-  std::cout << "change here" << std::endl;
-  wholebody_model::getNormalizedMomentum(stateDerivative, info) =
-      getNormalizedWholeBodyMomentumRate(pinocchioInterfaceCppAd, info, input);
+  wholebody_model::getNormalizedMomentum(stateDerivative, info) = getNormalizedWholeBodyMomentumRate(pinocchioInterfaceCppAd, info, input);
 
   // derivatives of the floating base variables + joint velocities
   wholebody_model::getGeneralizedCoordinates(stateDerivative, info) = mappingCppAd.getPinocchioJointVelocity(state, input);

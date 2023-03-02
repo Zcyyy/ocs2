@@ -28,6 +28,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ******************************************************************************/
 
 #include <ocs2_core/integration/IntegratorBase.h>
+#include <iostream>
 
 namespace ocs2 {
 
@@ -45,6 +46,7 @@ IntegratorBase::IntegratorBase(std::shared_ptr<SystemEventHandler> eventHandlerP
 /******************************************************************************************************/
 /******************************************************************************************************/
 IntegratorBase::system_func_t IntegratorBase::systemFunction(OdeBase& system, int maxNumSteps) const {
+  std::cout << "maxNumSteps: " << maxNumSteps << std::endl;
   return [&system, maxNumSteps](const vector_t& x, vector_t& dxdt, scalar_t t) {
     dxdt = system.computeFlowMap(t, x);
     // max number of function calls

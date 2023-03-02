@@ -31,9 +31,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <iostream>
 
-#include <ocs2_legged_robot/common/utils.h>
-#include <ocs2_legged_robot/gait/LegLogic.h>
-#include <ocs2_legged_robot/gait/MotionPhaseDefinition.h>
+#include <ocs2_legged_robot_legged/common/utils.h>
+#include <ocs2_legged_robot_legged/gait/LegLogic.h>
+#include <ocs2_legged_robot_legged/gait/MotionPhaseDefinition.h>
 #include <ocs2_robotic_tools/common/RotationTransforms.h>
 
 namespace ocs2 {

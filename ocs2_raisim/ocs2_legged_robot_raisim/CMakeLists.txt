@@ -5,10 +5,11 @@ project(ocs2_legged_robot_raisim)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(CATKIN_PACKAGE_DEPENDENCIES
-  ocs2_legged_robot
-  ocs2_legged_robot_ros
+  ocs2_legged_robot_legged
+  ocs2_legged_robot_ros_legged
   ocs2_raisim_core
   ocs2_raisim_ros
+  ocs2_whole_body_model
 )
 
 find_package(catkin REQUIRED COMPONENTS

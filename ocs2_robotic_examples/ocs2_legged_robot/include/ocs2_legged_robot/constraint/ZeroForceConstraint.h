@@ -29,7 +29,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 
-#include <ocs2_whole_body_model/WholeBodyModelInfo.h>
+#include <ocs2_centroidal_model/CentroidalModelInfo.h>
 #include <ocs2_core/constraint/StateInputConstraint.h>
 
 #include "ocs2_legged_robot/reference_manager/SwitchedModelReferenceManager.h"
@@ -45,7 +45,7 @@ class ZeroForceConstraint final : public StateInputConstraint {
    * @param [in] contactPointIndex : The 3 DoF contact index.
    * @param [in] info : The centroidal model information.
    */
-  ZeroForceConstraint(const SwitchedModelReferenceManager& referenceManager, size_t contactPointIndex, WholeBodyModelInfo info);
+  ZeroForceConstraint(const SwitchedModelReferenceManager& referenceManager, size_t contactPointIndex, CentroidalModelInfo info);
 
   ~ZeroForceConstraint() override = default;
   ZeroForceConstraint* clone() const override { return new ZeroForceConstraint(*this); }
@@ -61,7 +61,7 @@ class ZeroForceConstraint final : public StateInputConstraint {
 
   const SwitchedModelReferenceManager* referenceManagerPtr_;
   const size_t contactPointIndex_;
-  const WholeBodyModelInfo info_;
+  const CentroidalModelInfo info_;
 };
 
 }  // namespace legged_robot

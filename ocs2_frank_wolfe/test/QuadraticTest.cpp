@@ -112,9 +112,6 @@ TEST(QuadraticTest, QuadraticTest) {
   vector_t parameters;
   nlpSolver.getParameters(parameters);
 
-  std::cout << "cost: " << cost << std::endl;
-  std::cout << "parameters: " << parameters.transpose() << std::endl;
-
   const double optimalCost = 1.0;
   const Eigen::Vector2d optimalParameters = Eigen::Vector2d::Ones();
 

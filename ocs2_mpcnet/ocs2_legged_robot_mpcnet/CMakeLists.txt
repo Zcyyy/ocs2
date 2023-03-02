@@ -2,9 +2,9 @@ cmake_minimum_required(VERSION 3.0.2)
 project(ocs2_legged_robot_mpcnet)
 
 set(CATKIN_PACKAGE_DEPENDENCIES
-  ocs2_legged_robot
+  ocs2_legged_robot_legged
   ocs2_legged_robot_raisim
-  ocs2_legged_robot_ros
+  ocs2_legged_robot_ros_legged
   ocs2_mpcnet_core
 )
 

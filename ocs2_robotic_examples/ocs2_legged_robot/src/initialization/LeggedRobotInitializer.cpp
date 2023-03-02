@@ -31,7 +31,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "ocs2_legged_robot/common/utils.h"
 
-#include <ocs2_whole_body_model/AccessHelperFunctions.h>
+#include <ocs2_centroidal_model/AccessHelperFunctions.h>
 
 namespace ocs2 {
 namespace legged_robot {
@@ -39,7 +39,7 @@ namespace legged_robot {
 /******************************************************************************************************/
 /******************************************************************************************************/
 /******************************************************************************************************/
-LeggedRobotInitializer::LeggedRobotInitializer(WholeBodyModelInfo info, const SwitchedModelReferenceManager& referenceManager,
+LeggedRobotInitializer::LeggedRobotInitializer(CentroidalModelInfo info, const SwitchedModelReferenceManager& referenceManager,
                                                bool extendNormalizedMomentum)
     : info_(std::move(info)), referenceManagerPtr_(&referenceManager), extendNormalizedMomentum_(extendNormalizedMomentum) {}
 
@@ -58,7 +58,7 @@ void LeggedRobotInitializer::compute(scalar_t time, const vector_t& state, scala
   input = weightCompensatingInput(info_, contactFlags);
   nextState = state;
   if (!extendNormalizedMomentum_) {
-    wholebody_model::getNormalizedMomentum(nextState, info_).setZero();
+    centroidal_model::getNormalizedMomentum(nextState, info_).setZero();
   }
 }
 

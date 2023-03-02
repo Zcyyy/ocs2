@@ -469,6 +469,7 @@ void GaussNewtonDDP::rolloutInitializer(PrimalSolution& primalSolution) {
     size_array_t postEventIndicesTail;
     vector_array_t stateTrajectoryTail;
     vector_array_t inputTrajectoryTail;
+    //TODO:this point run input so big
     std::ignore = initializerRolloutPtr_->run(initTime, initState, finalTime_, nullptr, modeSchedule, timeTrajectoryTail,
                                               postEventIndicesTail, stateTrajectoryTail, inputTrajectoryTail);
 
@@ -594,6 +595,7 @@ void GaussNewtonDDP::calculateController() {
   unoptimizedController_.biasArray_.resize(N);
   unoptimizedController_.deltaBiasArray_.resize(N);
 
+  //print debug infomation
   nextTimeIndex_ = 0;
   auto task = [this, N] {
     int timeIndex;
@@ -616,7 +618,7 @@ void GaussNewtonDDP::calculateController() {
     unoptimizedController_.biasArray_.back() = unoptimizedController_.biasArray_[secondToLastIndex];
     unoptimizedController_.deltaBiasArray_.back() = unoptimizedController_.deltaBiasArray_[secondToLastIndex];
   }
-
+  
   // checking the numerical stability of the controller parameters
   if (settings().checkNumericalStability_) {
     for (int timeIndex = 0; timeIndex < unoptimizedController_.size(); timeIndex++) {
@@ -990,6 +992,7 @@ void GaussNewtonDDP::runImpl(scalar_t initTime, const vector_t& initState, scala
   for (auto& ocp : optimalControlProblemStock_) {
     ocp.targetTrajectoriesPtr = &this->getReferenceManager().getTargetTrajectories();
   }
+  //TODO: get optimalControlProblemStock_
 
   // initialize parameters
   initTime_ = initTime;

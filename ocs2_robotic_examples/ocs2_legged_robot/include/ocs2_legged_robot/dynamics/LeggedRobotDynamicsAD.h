@@ -31,7 +31,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <ocs2_core/dynamics/SystemDynamicsBase.h>
 
-#include <ocs2_whole_body_model/PinocchioWholeBodyDynamicsAD.h>
+#include <ocs2_centroidal_model/PinocchioCentroidalDynamicsAD.h>
 #include <ocs2_pinocchio_interface/PinocchioInterface.h>
 
 #include "ocs2_legged_robot/common/ModelSettings.h"
@@ -41,7 +41,7 @@ namespace legged_robot {
 
 class LeggedRobotDynamicsAD final : public SystemDynamicsBase {
  public:
-  LeggedRobotDynamicsAD(const PinocchioInterface& pinocchioInterface, const WholeBodyModelInfo& info, const std::string& modelName,
+  LeggedRobotDynamicsAD(const PinocchioInterface& pinocchioInterface, const CentroidalModelInfo& info, const std::string& modelName,
                         const ModelSettings& modelSettings);
 
   ~LeggedRobotDynamicsAD() override = default;
@@ -54,7 +54,7 @@ class LeggedRobotDynamicsAD final : public SystemDynamicsBase {
  private:
   LeggedRobotDynamicsAD(const LeggedRobotDynamicsAD& rhs) = default;
 
-  PinocchioWholeBodyDynamicsAD pinocchioWholeBodyDynamicsAd_;
+  PinocchioCentroidalDynamicsAD pinocchioCentroidalDynamicsAd_;
 };
 
 }  // namespace legged_robot
