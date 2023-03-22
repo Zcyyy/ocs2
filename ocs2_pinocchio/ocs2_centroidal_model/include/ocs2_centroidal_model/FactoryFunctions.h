@@ -40,6 +40,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "ocs2_centroidal_model/CentroidalModelInfo.h"
 
+#include <iostream>
+
 namespace ocs2 {
 namespace centroidal_model {
 

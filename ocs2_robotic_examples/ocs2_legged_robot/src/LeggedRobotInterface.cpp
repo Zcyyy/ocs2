@@ -113,9 +113,13 @@ LeggedRobotInterface::LeggedRobotInterface(const std::string& taskFile, const st
 /******************************************************************************************************/
 void LeggedRobotInterface::setupOptimalConrolProblem(const std::string& taskFile, const std::string& urdfFile,
                                                      const std::string& referenceFile, bool verbose) {
+  std::cout << modelSettings_.jointNames.at(1) << std::endl;
   // PinocchioInterface
   pinocchioInterfacePtr_.reset(new PinocchioInterface(centroidal_model::createPinocchioInterface(urdfFile, modelSettings_.jointNames)));
 
+  std::cout << modelSettings_.contactNames3DoF.at(1) << std::endl;
+  std::cout << modelSettings_.contactNames6DoF.data() << std::endl;
+  std::cout << pinocchioInterfacePtr_->getModel().nq << std::endl;
   // CentroidalModelInfo
   centroidalModelInfo_ = centroidal_model::createCentroidalModelInfo(
       *pinocchioInterfacePtr_, centroidal_model::loadCentroidalType(taskFile),

@@ -77,6 +77,7 @@ class GaussNewtonDDP_MPC final : public MPC_BASE {
     if (settings().coldStart_) {
       ddpPtr_->reset();
     }
+    //TODO:2022.11.21
     ddpPtr_->run(initTime, initState, finalTime);
   }
 

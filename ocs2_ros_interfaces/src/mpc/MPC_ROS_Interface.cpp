@@ -235,6 +235,7 @@ void MPC_ROS_Interface::copyToBuffer(const SystemObservation& mpcInitObservation
 /******************************************************************************************************/
 /******************************************************************************************************/
 void MPC_ROS_Interface::mpcObservationCallback(const ocs2_msgs::mpc_observation::ConstPtr& msg) {
+  std::cout << "mpcObservation Callback" << std::endl;
   std::lock_guard<std::mutex> resetLock(resetMutex_);
 
   if (!resetRequestedEver_.load()) {
@@ -242,19 +243,25 @@ void MPC_ROS_Interface::mpcObservationCallback(const ocs2_msgs::mpc_observation:
     return;
   }
 
+  std::cout << "mpcObservation Callback" << std::endl;
   // current time, state, input, and subsystem
+  std::cout << "observation msg" << *msg << std::endl;
   const auto currentObservation = ros_msg_conversions::readObservationMsg(*msg);
 
   // measure the delay in running MPC
   mpcTimer_.startTimer();
 
+  std::cout << "mpcObservation Callback" << std::endl;
   // run MPC
   bool controllerIsUpdated = mpc_.run(currentObservation.time, currentObservation.state);
+
+  std::cout << "mpcObservation Callback" << std::endl;
   if (!controllerIsUpdated) {
     return;
   }
   copyToBuffer(currentObservation);
 
+  std::cout << "mpcObservation Callback" << std::endl;
   // measure the delay for sending ROS messages
   mpcTimer_.endTimer();
 
@@ -267,6 +274,7 @@ void MPC_ROS_Interface::mpcObservationCallback(const ocs2_msgs::mpc_observation:
     std::cerr << "WARNING: The solution time window might be shorter than the MPC delay!\n";
   }
 
+  std::cout << "mpcObservation Callback" << std::endl;
   // display
   if (mpc_.settings().debugPrint_) {
     std::cerr << '\n';
@@ -276,6 +284,7 @@ void MPC_ROS_Interface::mpcObservationCallback(const ocs2_msgs::mpc_observation:
     std::cerr << "\n###   Latest  : " << mpcTimer_.getLastIntervalInMilliseconds() << "[ms]." << std::endl;
   }
 
+  std::cout << "mpcObservation Callback" << std::endl;
 #ifdef PUBLISH_THREAD
   std::unique_lock<std::mutex> lk(publisherMutex_);
   readyToPublish_ = true;
@@ -333,7 +342,6 @@ void MPC_ROS_Interface::launchNodes(ros::NodeHandle& nodeHandle) {
   // Observation subscriber
   mpcObservationSubscriber_ = nodeHandle.subscribe(topicPrefix_ + "_mpc_observation", 1, &MPC_ROS_Interface::mpcObservationCallback, this,
                                                    ::ros::TransportHints().tcpNoDelay());
-
   // MPC publisher
   mpcPolicyPublisher_ = nodeHandle.advertise<ocs2_msgs::mpc_flattened_controller>(topicPrefix_ + "_mpc_policy", 1, true);
 
